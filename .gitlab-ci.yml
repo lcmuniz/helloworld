@@ -1,0 +1,23 @@
+stages:
+  - build 
+  - deploy 
+
+hw-build:
+  image: maven
+  stage: build 
+  script: "mvn package"
+  artifacts:
+    paths:
+      - target/*.jar
+
+hw-deploy:
+  image: docker
+  script:
+    - ls -la
+    - docker login -u tcema -p 123123213
+    - docker build -t lcmuniz/helloworld:1.0.0 . 
+    - docker push lcmuniz/helloworld:1.0.0
+  only:
+    - master
+  stage: deploy
+
